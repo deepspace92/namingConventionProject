@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Naming Convention Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>File Naming Convention Demo</h1>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="basic">Basic Version</button>
+            <button class="tab-btn" data-tab="advanced">Advanced Version</button>
+        </div>
+        
+        <div class="tab-content active" id="basic">
+            <h2>Basic File Renaming</h2>
+            <p>Renames files in a single directory using the format: <code>YYYYMMDDHHMMSS_originalfilename.ext</code></p>
+            
+            <div class="file-input">
+                <h3>Add Files</h3>
+                <div class="file-add">
+                    <input type="text" id="basic-filename" placeholder="Enter filename (e.g., data.txt)">
+                    <button id="basic-add-btn">Add</button>
+                </div>
+                
+                <div class="file-list" id="basic-file-list">
+                    <p class="empty-message">No files added yet</p>
+                </div>
+            </div>
+            
+            <button id="basic-process-btn" class="process-btn">Process Files</button>
+            
+            <div class="results">
+                <h3>Results</h3>
+                <div class="result-list" id="basic-result-list">
+                    <p class="empty-message">No files processed yet</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="advanced">
+            <h2>Advanced File Renaming</h2>
+            <p>Recursively renames files in directories using the format: <code>YYYYMMDDHHMMSS_directoryname_originalfilename.ext</code></p>
+            
+            <div class="file-input">
+                <h3>Add Files</h3>
+                <div class="directory-structure">
+                    <div class="directory-item">
+                        <input type="text" id="directory-name" placeholder="Directory name">
+                    </div>
+                    <div class="file-add">
+                        <input type="text" id="advanced-filename" placeholder="Enter filename (e.g., data.txt)">
+                        <button id="advanced-add-btn">Add</button>
+                    </div>
+                </div>
+                
+                <div class="file-list" id="advanced-file-list">
+                    <p class="empty-message">No files added yet</p>
+                </div>
+            </div>
+            
+            <button id="advanced-process-btn" class="process-btn">Process Files</button>
+            
+            <div class="results">
+                <h3>Results</h3>
+                <div class="result-list" id="advanced-result-list">
+                    <p class="empty-message">No files processed yet</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="validation-section">
+            <h2>Validate Filename</h2>
+            <p>Check if a filename follows the naming convention</p>
+            
+            <div class="validation-input">
+                <input type="text" id="validation-input" placeholder="Enter filename to validate">
+                <button id="validate-btn">Validate</button>
+            </div>
+            
+            <div class="validation-result" id="validation-result">
+                <!-- Validation result will appear here -->
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
