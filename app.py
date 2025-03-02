@@ -8,10 +8,10 @@ import os
 import sys
 import shutil
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 
-def enforce_naming_convention(source_dir: str, dest_dir: str) -> None:
+def enforce_naming_convention(source_dir: str, dest_dir: str) -> List[Tuple[str, str]]:
     """
     Enforce naming convention for files in a local directory.
     
@@ -20,7 +20,7 @@ def enforce_naming_convention(source_dir: str, dest_dir: str) -> None:
         dest_dir: Path to the destination directory where renamed files will be placed
     
     Returns:
-        None
+        List[Tuple[str, str]]: List of tuples containing (original_filename, new_filename)
     """
     # Create the destination directory if it doesn't exist
     os.makedirs(dest_dir, exist_ok=True)
@@ -67,7 +67,12 @@ def is_valid_name(filename: str) -> bool:
         return False
     
     try:
-        datetime.strptime(parts[0], "%Y%m%d%H%M%S")
+        # Ensure the timestamp is exactly 14 digits (YYYYMMDDhhmmss)
+        timestamp = parts[0]
+        if len(timestamp) != 14:
+            return False
+            
+        datetime.strptime(timestamp, "%Y%m%d%H%M%S")
         return True
     except ValueError:
         return False
