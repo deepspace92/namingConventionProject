@@ -66,14 +66,33 @@ The web demo uses the HTML5 File API to implement file uploading:
 - **JavaScript**: FileReader API to handle file contents
 - **Validation**: Client-side extension checking (.txt and .csv)
 
+#### Timestamp Position Options
+
+The web demo offers flexible timestamp positioning:
+
+- **Prefix Mode**: Places timestamp at the beginning of the filename
+  - Basic: `YYYYMMDDHHMMSS_originalfilename.ext`
+  - Advanced: `YYYYMMDDHHMMSS_directoryname_originalfilename.ext`
+
+- **Suffix Mode**: Places timestamp at the end of the filename
+  - Basic: `originalfilename_YYYYMMDDHHMMSS.ext`
+  - Advanced: `directoryname_originalfilename_YYYYMMDDHHMMSS.ext`
+
+The implementation:
+1. Uses radio buttons for option selection
+2. Dynamically adjusts filename pattern based on selection
+3. Uses string manipulation to properly handle file extensions
+4. Updates validation patterns to recognize both formats
+
 #### File Processing
 
 Processing happens entirely client-side:
 
 1. Files are stored in memory as JavaScript File objects
 2. When "Process Files" is clicked, JavaScript:
+   - Identifies selected timestamp position
    - Generates timestamps using the current date/time
-   - Creates new filenames based on the naming convention
+   - Creates new filenames based on the naming convention and position choice
    - Creates virtual renamed files ready for download
 
 #### Download Implementation
@@ -88,7 +107,7 @@ The download functionality uses the following browser APIs:
 
 - **File Collection**: Arrays store uploaded files with metadata
 - **DOM Manipulation**: Dynamic creation of file list and result items
-- **Event Handling**: Click events for upload, process, download
+- **Event Handling**: Click events for upload, process, download, and option selection
 - **File Processing**: Pure JavaScript implementation of the naming convention logic
 
 ## Testing
@@ -108,6 +127,20 @@ The code includes several error handling mechanisms:
 3. Try/except blocks for file operations
 4. Timestamp validation in the validation functions
 5. Client-side validation in the web demo for file types
+
+## Validation Logic
+
+The validation system now recognizes four different patterns:
+
+1. Basic prefix format: `YYYYMMDDHHMMSS_filename.ext`
+2. Basic suffix format: `filename_YYYYMMDDHHMMSS.ext`
+3. Advanced prefix format: `YYYYMMDDHHMMSS_directory_filename.ext`
+4. Advanced suffix format: `directory_filename_YYYYMMDDHHMMSS.ext`
+
+The implementation uses regular expressions to check:
+- Correct number of underscore separators
+- 14-digit timestamp in the correct position
+- Valid file extensions (.txt, .csv)
 
 ## Browser Compatibility
 
@@ -139,7 +172,7 @@ The code is designed with several extension points:
 2. **Naming pattern customization**: Modify the timestamp format or naming pattern structure
 3. **Processing options**: Add command-line flags for additional functionality
 4. **Web demo enhancements**: Add drag-and-drop, progress indication, batch downloads
-5. **Logging enhancement**: Replace print statements with proper logging
+5. **Timestamp position**: The web demo already supports prefix/suffix; similar functionality could be added to Python scripts
 
 ## Test Fixtures
 

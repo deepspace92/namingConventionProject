@@ -9,6 +9,7 @@ A Python utility for enforcing consistent file naming conventions across directo
 - Validates filenames against naming convention patterns
 - Provides both single-directory and recursive processing
 - Web-based demo with file upload and download capabilities
+- Flexible timestamp positioning (prefix or suffix)
 
 ## Components
 
@@ -34,6 +35,9 @@ A Python utility for enforcing consistent file naming conventions across directo
   - Upload your own .txt and .csv files
   - Process files according to naming conventions
   - Download renamed files to your local computer
+- Configurable timestamp positioning:
+  - Prefix mode (timestamp at beginning): `YYYYMMDDHHMMSS_filename.ext`
+  - Suffix mode (timestamp at end): `filename_YYYYMMDDHHMMSS.ext`
 - Includes filename validation testing
 - Open `index.html` in a browser to run the demo
 
@@ -74,20 +78,29 @@ python3 test_validation.py
 
 1. Open `index.html` in a modern web browser
 2. Select the mode (Basic or Advanced)
-3. Upload files using the file input control
-4. For Advanced mode, specify the directory name
-5. Click "Process Files" to generate renamed versions
-6. Use the "Download" buttons to save renamed files
+3. Choose timestamp position (beginning or end)
+4. Upload files using the file input control
+5. For Advanced mode, specify the directory name
+6. Click "Process Files" to generate renamed versions
+7. Use the "Download" buttons to save renamed files
 
 ## Naming Convention
 
 Files are renamed according to the following rules:
 
-1. Basic format: `YYYYMMDDHHMMSS_originalfilename.ext`
+1. Basic format (Prefix mode): `YYYYMMDDHHMMSS_originalfilename.ext`
    - Timestamp must be exactly 14 digits
    - Must have exactly one underscore separator
 
-2. Advanced format: `YYYYMMDDHHMMSS_directoryname_originalfilename.ext`
+2. Basic format (Suffix mode): `originalfilename_YYYYMMDDHHMMSS.ext`
+   - Timestamp must be exactly 14 digits
+   - Must have exactly one underscore separator
+
+3. Advanced format (Prefix mode): `YYYYMMDDHHMMSS_directoryname_originalfilename.ext`
+   - Timestamp must be exactly 14 digits
+   - Must have exactly two underscore separators
+
+4. Advanced format (Suffix mode): `directoryname_originalfilename_YYYYMMDDHHMMSS.ext`
    - Timestamp must be exactly 14 digits
    - Must have exactly two underscore separators
 
@@ -110,3 +123,4 @@ Files are renamed according to the following rules:
 - File metadata inclusion option
 - Command-line flags for advanced options
 - Drag-and-drop file upload interface
+- Customizable date/time format options
