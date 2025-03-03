@@ -56,14 +56,40 @@ Entry point function that:
 
 ### Web Demo Implementation
 
-The web demo (**index.html**, **styles.css**, **script.js**) provides a browser-based interface:
+The web demo (**index.html**, **styles.css**, **script.js**) provides a browser-based interface with the following features:
 
-- Tab-based interface for basic and advanced modes
-- File addition simulation
-- Renaming simulation with timestamp generation
-- Validation testing for filenames
+#### File Upload System
 
-The JavaScript implements the same validation logic as the Python scripts to ensure consistency.
+The web demo uses the HTML5 File API to implement file uploading:
+
+- **HTML**: `<input type="file">` elements with multiple file selection support
+- **JavaScript**: FileReader API to handle file contents
+- **Validation**: Client-side extension checking (.txt and .csv)
+
+#### File Processing
+
+Processing happens entirely client-side:
+
+1. Files are stored in memory as JavaScript File objects
+2. When "Process Files" is clicked, JavaScript:
+   - Generates timestamps using the current date/time
+   - Creates new filenames based on the naming convention
+   - Creates virtual renamed files ready for download
+
+#### Download Implementation
+
+The download functionality uses the following browser APIs:
+
+1. **Blob API**: To create file data blobs in memory
+2. **URL.createObjectURL()**: To create temporary URLs for the file blobs
+3. **Programmatic download links**: To trigger file downloads
+
+#### Key Code Components
+
+- **File Collection**: Arrays store uploaded files with metadata
+- **DOM Manipulation**: Dynamic creation of file list and result items
+- **Event Handling**: Click events for upload, process, download
+- **File Processing**: Pure JavaScript implementation of the naming convention logic
 
 ## Testing
 
@@ -81,12 +107,29 @@ The code includes several error handling mechanisms:
 2. Directory existence validation
 3. Try/except blocks for file operations
 4. Timestamp validation in the validation functions
+5. Client-side validation in the web demo for file types
+
+## Browser Compatibility
+
+The web demo requires the following browser capabilities:
+
+- HTML5 File API support
+- JavaScript ES6 features (template literals, arrow functions)
+- Blob API and URL.createObjectURL support
+- Modern CSS (flexbox layouts)
+
+Tested and confirmed working on:
+- Chrome 80+
+- Firefox 75+
+- Safari 13+
+- Edge 80+
 
 ## Performance Considerations
 
 - File operations use Python's built-in **shutil.copyfile** for efficiency
 - The scripts store processed files in memory, which could be a limitation for very large directories
 - Recursive traversal in appV2.py handles nested directories but may take longer for deep hierarchies
+- The web demo processes files in memory, so very large files may cause performance issues
 
 ## Extension Points
 
@@ -95,7 +138,8 @@ The code is designed with several extension points:
 1. **File type expansion**: Modify the file extension check to include more types
 2. **Naming pattern customization**: Modify the timestamp format or naming pattern structure
 3. **Processing options**: Add command-line flags for additional functionality
-4. **Logging enhancement**: Replace print statements with proper logging
+4. **Web demo enhancements**: Add drag-and-drop, progress indication, batch downloads
+5. **Logging enhancement**: Replace print statements with proper logging
 
 ## Test Fixtures
 

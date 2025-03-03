@@ -8,7 +8,7 @@ A Python utility for enforcing consistent file naming conventions across directo
 - Adds timestamps for file versioning and uniqueness
 - Validates filenames against naming convention patterns
 - Provides both single-directory and recursive processing
-- Web-based demo interface for interactive testing
+- Web-based demo with file upload and download capabilities
 
 ## Components
 
@@ -30,7 +30,11 @@ A Python utility for enforcing consistent file naming conventions across directo
 
 - Interactive HTML/CSS/JavaScript demonstration
 - Simulates both basic and advanced renaming operations
-- Allows testing of filename validation rules
+- Features real file upload and download functionality:
+  - Upload your own .txt and .csv files
+  - Process files according to naming conventions
+  - Download renamed files to your local computer
+- Includes filename validation testing
 - Open `index.html` in a browser to run the demo
 
 ## Usage
@@ -66,6 +70,15 @@ Successfully processed 2 files
 python3 test_validation.py
 ```
 
+### Web Demo Usage
+
+1. Open `index.html` in a modern web browser
+2. Select the mode (Basic or Advanced)
+3. Upload files using the file input control
+4. For Advanced mode, specify the directory name
+5. Click "Process Files" to generate renamed versions
+6. Use the "Download" buttons to save renamed files
+
 ## Naming Convention
 
 Files are renamed according to the following rules:
@@ -85,9 +98,10 @@ Files are renamed according to the following rules:
 
 ## Requirements
 
-- Python 3.6+
+- Python 3.6+ for Python scripts
 - No external dependencies for Python scripts
-- Web browser (for demo interface)
+- Modern web browser with JavaScript enabled for web demo
+- File API support for file upload/download features
 
 ## Future Enhancements
 
@@ -95,3 +109,4 @@ Files are renamed according to the following rules:
 - Configurable naming patterns
 - File metadata inclusion option
 - Command-line flags for advanced options
+- Drag-and-drop file upload interface
