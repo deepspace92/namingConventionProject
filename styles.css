@@ -77,9 +77,19 @@ h1 {
     margin-bottom: 20px;
 }
 
-.file-add {
+.file-add, .file-upload {
     display: flex;
     margin-bottom: 15px;
+    align-items: center;
+}
+
+.file-upload input[type="file"] {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+    font-size: 14px;
 }
 
 input[type="text"] {
@@ -103,6 +113,14 @@ button {
 
 button:hover {
     background-color: #2980b9;
+}
+
+.upload-btn {
+    background-color: #9b59b6;
+}
+
+.upload-btn:hover {
+    background-color: #8e44ad;
 }
 
 .process-btn {
@@ -145,6 +163,18 @@ button:hover {
     background-color: #e74c3c;
     padding: 5px 10px;
     font-size: 12px;
+    min-width: 70px;
+}
+
+.download-btn {
+    background-color: #2ecc71;
+    padding: 5px 10px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.download-btn:hover {
+    background-color: #27ae60;
 }
 
 .file-item button:hover, .result-item button:hover {
@@ -168,6 +198,14 @@ button:hover {
 
 .directory-item {
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.directory-item label {
+    margin-right: 10px;
+    min-width: 120px;
+    font-weight: 500;
 }
 
 /* Validation Section */

@@ -23,37 +23,55 @@ document.addEventListener('DOMContentLoaded', function() {
     // Basic version functionality
     const basicFiles = [];
     const basicFileList = document.getElementById('basic-file-list');
-    const basicFilenameInput = document.getElementById('basic-filename');
-    const basicAddBtn = document.getElementById('basic-add-btn');
+    const basicFileUpload = document.getElementById('basic-file-upload');
+    const basicUploadBtn = document.getElementById('basic-upload-btn');
     const basicProcessBtn = document.getElementById('basic-process-btn');
     const basicResultList = document.getElementById('basic-result-list');
     
-    // Add file to basic version
-    basicAddBtn.addEventListener('click', () => {
-        const filename = basicFilenameInput.value.trim();
-        
-        if (filename && (filename.endsWith('.txt') || filename.endsWith('.csv'))) {
-            basicFiles.push(filename);
-            updateBasicFileList();
-            basicFilenameInput.value = '';
-        } else {
-            alert('Please enter a valid filename with .txt or .csv extension');
+    // File upload functionality for basic version
+    basicUploadBtn.addEventListener('click', () => {
+        if (basicFileUpload.files.length === 0) {
+            alert('Please select files to upload');
+            return;
         }
+        
+        // Process each selected file
+        for (let i = 0; i < basicFileUpload.files.length; i++) {
+            const file = basicFileUpload.files[i];
+            
+            // Check if the file has a valid extension
+            if (!file.name.endsWith('.txt') && !file.name.endsWith('.csv')) {
+                alert(`File ${file.name} is not supported. Only .txt and .csv files are allowed.`);
+                continue;
+            }
+            
+            // Add file to our array
+            basicFiles.push({
+                name: file.name,
+                file: file
+            });
+        }
+        
+        // Update the file list display
+        updateBasicFileList();
+        
+        // Clear the file input
+        basicFileUpload.value = '';
     });
     
     // Update basic file list display
     function updateBasicFileList() {
         if (basicFiles.length === 0) {
-            basicFileList.innerHTML = '<p class="empty-message">No files added yet</p>';
+            basicFileList.innerHTML = '<p class="empty-message">No files uploaded yet</p>';
             return;
         }
         
         basicFileList.innerHTML = '';
-        basicFiles.forEach((file, index) => {
+        basicFiles.forEach((fileInfo, index) => {
             const fileItem = document.createElement('div');
             fileItem.className = 'file-item';
             fileItem.innerHTML = `
-                <span>${file}</span>
+                <span>${fileInfo.name}</span>
                 <button class="remove-btn" data-index="${index}">Remove</button>
             `;
             basicFileList.appendChild(fileItem);
@@ -72,24 +90,36 @@ document.addEventListener('DOMContentLoaded', function() {
     // Process files in basic version
     basicProcessBtn.addEventListener('click', () => {
         if (basicFiles.length === 0) {
-            alert('Please add files to process');
+            alert('Please upload files to process');
             return;
         }
         
         basicResultList.innerHTML = '';
-        basicFiles.forEach(file => {
+        basicFiles.forEach(fileInfo => {
             const timestamp = generateTimestamp();
-            const newName = `${timestamp}_${file}`;
+            const newName = `${timestamp}_${fileInfo.name}`;
             
             const resultItem = document.createElement('div');
             resultItem.className = 'result-item';
             resultItem.innerHTML = `
                 <div>
-                    <strong>Original:</strong> ${file}<br>
+                    <strong>Original:</strong> ${fileInfo.name}<br>
                     <strong>Renamed:</strong> ${newName}
+                </div>
+                <div>
+                    <button class="download-btn" data-filename="${newName}" data-original="${fileInfo.name}" data-index="${basicFiles.indexOf(fileInfo)}">Download</button>
                 </div>
             `;
             basicResultList.appendChild(resultItem);
+        });
+        
+        // Add event listeners to download buttons
+        document.querySelectorAll('#basic-result-list .download-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const index = parseInt(e.target.getAttribute('data-index'));
+                const newFilename = e.target.getAttribute('data-filename');
+                downloadFile(basicFiles[index].file, newFilename);
+            });
         });
     });
     
@@ -97,41 +127,58 @@ document.addEventListener('DOMContentLoaded', function() {
     const advancedFiles = [];
     const advancedFileList = document.getElementById('advanced-file-list');
     const directoryNameInput = document.getElementById('directory-name');
-    const advancedFilenameInput = document.getElementById('advanced-filename');
-    const advancedAddBtn = document.getElementById('advanced-add-btn');
+    const advancedFileUpload = document.getElementById('advanced-file-upload');
+    const advancedUploadBtn = document.getElementById('advanced-upload-btn');
     const advancedProcessBtn = document.getElementById('advanced-process-btn');
     const advancedResultList = document.getElementById('advanced-result-list');
     
-    // Add file to advanced version
-    advancedAddBtn.addEventListener('click', () => {
-        const dirname = directoryNameInput.value.trim() || 'default';
-        const filename = advancedFilenameInput.value.trim();
-        
-        if (filename && (filename.endsWith('.txt') || filename.endsWith('.csv'))) {
-            advancedFiles.push({
-                directory: dirname,
-                filename: filename
-            });
-            updateAdvancedFileList();
-            advancedFilenameInput.value = '';
-        } else {
-            alert('Please enter a valid filename with .txt or .csv extension');
+    // File upload functionality for advanced version
+    advancedUploadBtn.addEventListener('click', () => {
+        if (advancedFileUpload.files.length === 0) {
+            alert('Please select files to upload');
+            return;
         }
+        
+        const directoryName = directoryNameInput.value.trim() || 'mydir';
+        
+        // Process each selected file
+        for (let i = 0; i < advancedFileUpload.files.length; i++) {
+            const file = advancedFileUpload.files[i];
+            
+            // Check if the file has a valid extension
+            if (!file.name.endsWith('.txt') && !file.name.endsWith('.csv')) {
+                alert(`File ${file.name} is not supported. Only .txt and .csv files are allowed.`);
+                continue;
+            }
+            
+            // Add file to our array
+            advancedFiles.push({
+                directory: directoryName,
+                name: file.name,
+                file: file
+            });
+        }
+        
+        // Update the file list display
+        updateAdvancedFileList();
+        
+        // Clear the file input
+        advancedFileUpload.value = '';
     });
     
     // Update advanced file list display
     function updateAdvancedFileList() {
         if (advancedFiles.length === 0) {
-            advancedFileList.innerHTML = '<p class="empty-message">No files added yet</p>';
+            advancedFileList.innerHTML = '<p class="empty-message">No files uploaded yet</p>';
             return;
         }
         
         advancedFileList.innerHTML = '';
-        advancedFiles.forEach((file, index) => {
+        advancedFiles.forEach((fileInfo, index) => {
             const fileItem = document.createElement('div');
             fileItem.className = 'file-item';
             fileItem.innerHTML = `
-                <span>${file.directory}/${file.filename}</span>
+                <span>${fileInfo.directory}/${fileInfo.name}</span>
                 <button class="remove-btn" data-index="${index}">Remove</button>
             `;
             advancedFileList.appendChild(fileItem);
@@ -150,24 +197,36 @@ document.addEventListener('DOMContentLoaded', function() {
     // Process files in advanced version
     advancedProcessBtn.addEventListener('click', () => {
         if (advancedFiles.length === 0) {
-            alert('Please add files to process');
+            alert('Please upload files to process');
             return;
         }
         
         advancedResultList.innerHTML = '';
-        advancedFiles.forEach(file => {
+        advancedFiles.forEach(fileInfo => {
             const timestamp = generateTimestamp();
-            const newName = `${timestamp}_${file.directory}_${file.filename}`;
+            const newName = `${timestamp}_${fileInfo.directory}_${fileInfo.name}`;
             
             const resultItem = document.createElement('div');
             resultItem.className = 'result-item';
             resultItem.innerHTML = `
                 <div>
-                    <strong>Original:</strong> ${file.directory}/${file.filename}<br>
+                    <strong>Original:</strong> ${fileInfo.directory}/${fileInfo.name}<br>
                     <strong>Renamed:</strong> ${newName}
+                </div>
+                <div>
+                    <button class="download-btn" data-filename="${newName}" data-original="${fileInfo.name}" data-index="${advancedFiles.indexOf(fileInfo)}">Download</button>
                 </div>
             `;
             advancedResultList.appendChild(resultItem);
+        });
+        
+        // Add event listeners to download buttons
+        document.querySelectorAll('#advanced-result-list .download-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const index = parseInt(e.target.getAttribute('data-index'));
+                const newFilename = e.target.getAttribute('data-filename');
+                downloadFile(advancedFiles[index].file, newFilename);
+            });
         });
     });
     
@@ -220,5 +279,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const advancedPattern = /^\d{14}_[^_]+_[^_]+\.(txt|csv)$/;
         
         return basicPattern.test(filename) || advancedPattern.test(filename);
+    }
+    
+    function downloadFile(file, newFilename) {
+        // Create a blob from the file
+        const blob = new Blob([file], { type: file.type });
+        
+        // Create a download link
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = newFilename;
+        
+        // Add to document, click, and remove
+        document.body.appendChild(a);
+        a.click();
+        
+        // Clean up
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
     }
 });
