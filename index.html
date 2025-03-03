@@ -17,7 +17,18 @@
         
         <div class="tab-content active" id="basic">
             <h2>Basic File Renaming</h2>
-            <p>Renames files using the format: <code>YYYYMMDDHHMMSS_originalfilename.ext</code></p>
+            <p>Default format: <code>YYYYMMDDHHMMSS_originalfilename.ext</code></p>
+            
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="basic-timestamp-position" value="prefix" checked>
+                    Timestamp at beginning (prefix)
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="basic-timestamp-position" value="suffix">
+                    Timestamp at end (suffix)
+                </label>
+            </div>
             
             <div class="file-input">
                 <h3>Upload Files</h3>
@@ -43,7 +54,18 @@
         
         <div class="tab-content" id="advanced">
             <h2>Advanced File Renaming</h2>
-            <p>Renames files using the format: <code>YYYYMMDDHHMMSS_directoryname_originalfilename.ext</code></p>
+            <p>Default format: <code>YYYYMMDDHHMMSS_directoryname_originalfilename.ext</code></p>
+            
+            <div class="options">
+                <label class="option-label">
+                    <input type="radio" name="advanced-timestamp-position" value="prefix" checked>
+                    Timestamp at beginning (prefix)
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="advanced-timestamp-position" value="suffix">
+                    Timestamp at end (suffix)
+                </label>
+            </div>
             
             <div class="file-input">
                 <h3>Upload Files</h3>

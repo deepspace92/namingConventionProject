@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const basicUploadBtn = document.getElementById('basic-upload-btn');
     const basicProcessBtn = document.getElementById('basic-process-btn');
     const basicResultList = document.getElementById('basic-result-list');
+    const basicTimestampOptions = document.getElementsByName('basic-timestamp-position');
     
     // File upload functionality for basic version
     basicUploadBtn.addEventListener('click', () => {
@@ -94,10 +95,31 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        // Get selected timestamp position
+        let timestampPosition = 'prefix';
+        for (const option of basicTimestampOptions) {
+            if (option.checked) {
+                timestampPosition = option.value;
+                break;
+            }
+        }
+        
         basicResultList.innerHTML = '';
         basicFiles.forEach(fileInfo => {
             const timestamp = generateTimestamp();
-            const newName = `${timestamp}_${fileInfo.name}`;
+            let newName = '';
+            
+            // Generate filename based on timestamp position
+            if (timestampPosition === 'prefix') {
+                newName = `${timestamp}_${fileInfo.name}`;
+            } else {
+                // Extract file extension
+                const lastDotIndex = fileInfo.name.lastIndexOf('.');
+                const nameWithoutExt = fileInfo.name.substring(0, lastDotIndex);
+                const extension = fileInfo.name.substring(lastDotIndex);
+                
+                newName = `${nameWithoutExt}_${timestamp}${extension}`;
+            }
             
             const resultItem = document.createElement('div');
             resultItem.className = 'result-item';
@@ -131,6 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const advancedUploadBtn = document.getElementById('advanced-upload-btn');
     const advancedProcessBtn = document.getElementById('advanced-process-btn');
     const advancedResultList = document.getElementById('advanced-result-list');
+    const advancedTimestampOptions = document.getElementsByName('advanced-timestamp-position');
     
     // File upload functionality for advanced version
     advancedUploadBtn.addEventListener('click', () => {
@@ -201,10 +224,31 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        // Get selected timestamp position
+        let timestampPosition = 'prefix';
+        for (const option of advancedTimestampOptions) {
+            if (option.checked) {
+                timestampPosition = option.value;
+                break;
+            }
+        }
+        
         advancedResultList.innerHTML = '';
         advancedFiles.forEach(fileInfo => {
             const timestamp = generateTimestamp();
-            const newName = `${timestamp}_${fileInfo.directory}_${fileInfo.name}`;
+            let newName = '';
+            
+            // Generate filename based on timestamp position
+            if (timestampPosition === 'prefix') {
+                newName = `${timestamp}_${fileInfo.directory}_${fileInfo.name}`;
+            } else {
+                // Extract file extension
+                const lastDotIndex = fileInfo.name.lastIndexOf('.');
+                const nameWithoutExt = fileInfo.name.substring(0, lastDotIndex);
+                const extension = fileInfo.name.substring(lastDotIndex);
+                
+                newName = `${fileInfo.directory}_${nameWithoutExt}_${timestamp}${extension}`;
+            }
             
             const resultItem = document.createElement('div');
             resultItem.className = 'result-item';
@@ -244,6 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        // Check for both prefix and suffix formats
         const isValid = validateFilename(filename);
         
         if (isValid) {
@@ -252,7 +297,13 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             validationResult.innerHTML = `
                 <p><strong>${filename}</strong> does not follow the naming convention</p>
-                <p>Expected format: YYYYMMDDHHMMSS_filename.ext or YYYYMMDDHHMMSS_directory_filename.ext</p>
+                <p>Expected formats:</p>
+                <ul>
+                    <li>Prefix format: YYYYMMDDHHMMSS_filename.ext</li>
+                    <li>Prefix advanced format: YYYYMMDDHHMMSS_directory_filename.ext</li>
+                    <li>Suffix format: filename_YYYYMMDDHHMMSS.ext</li>
+                    <li>Suffix advanced format: directory_filename_YYYYMMDDHHMMSS.ext</li>
+                </ul>
             `;
             validationResult.className = 'validation-result invalid-result';
         }
@@ -272,13 +323,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function validateFilename(filename) {
-        // Basic validation pattern: timestamp_something.ext
-        const basicPattern = /^\d{14}_[^_]+\.(txt|csv)$/;
+        // Basic validation pattern (prefix): timestamp_something.ext
+        const basicPrefixPattern = /^\d{14}_[^_]+\.(txt|csv)$/;
         
-        // Advanced validation pattern: timestamp_directory_something.ext
-        const advancedPattern = /^\d{14}_[^_]+_[^_]+\.(txt|csv)$/;
+        // Advanced validation pattern (prefix): timestamp_directory_something.ext
+        const advancedPrefixPattern = /^\d{14}_[^_]+_[^_]+\.(txt|csv)$/;
         
-        return basicPattern.test(filename) || advancedPattern.test(filename);
+        // Basic validation pattern (suffix): something_timestamp.ext
+        const basicSuffixPattern = /^[^_]+_\d{14}\.(txt|csv)$/;
+        
+        // Advanced validation pattern (suffix): directory_something_timestamp.ext
+        const advancedSuffixPattern = /^[^_]+_[^_]+_\d{14}\.(txt|csv)$/;
+        
+        return (
+            basicPrefixPattern.test(filename) || 
+            advancedPrefixPattern.test(filename) ||
+            basicSuffixPattern.test(filename) ||
+            advancedSuffixPattern.test(filename)
+        );
     }
     
     function downloadFile(file, newFilename) {
